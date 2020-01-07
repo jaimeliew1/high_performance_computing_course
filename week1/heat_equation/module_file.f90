@@ -1,4 +1,4 @@
-MODULE global
+MODULE m_global
   INTEGER, PARAMETER :: N = 21 ! Number of grid points on x and y direction
   REAL, PARAMETER :: D = 1
   REAL, PARAMETER :: T_max = 0.125
@@ -6,13 +6,13 @@ MODULE global
   REAL :: dx, dt
   INTEGER :: N_iter
 
-END MODULE global
+END MODULE m_global
 
 
-MODULE heat_equation_routines
+MODULE m_routines
 CONTAINS
   SUBROUTINE init()
-    USE global
+    USE m_global
     IMPLICIT NONE
     INTEGER :: i, j
     REAL:: fourier_limit
@@ -52,7 +52,7 @@ CONTAINS
     ! Saves the temperature field to file for a given fileroot. If a step number
     ! is provided, the step number is appended to the fileroot.
     ! The output filename receives the extension .dat.
-    USE global
+    USE m_global
     IMPLICIT NONE
     INTEGER, OPTIONAL :: step_no
     INTEGER i, j
@@ -78,7 +78,7 @@ CONTAINS
 
 
   SUBROUTINE update_memory()
-    use global
+    use m_global
     T_old = T
   end subroutine update_memory
-END MODULE heat_equation_routines
+END MODULE m_routines

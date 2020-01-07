@@ -1,9 +1,9 @@
 ! Exercise 1b: FORTRAN program to solve the 2D heat equation
 ! author: Jaime Liew (jyli@dtu.dk)
 
-PROGRAM heat_equation
-  USE global
-  USE heat_equation_routines
+PROGRAM main
+  USE m_global
+  USE m_routines
   IMPLICIT NONE
   INTEGER :: i, j
 
@@ -21,4 +21,4 @@ PROGRAM heat_equation
 
    call save_output('final')
 
-END PROGRAM heat_equation
+END PROGRAM main
