@@ -10,6 +10,7 @@ objs = main.o\
 			 s_save_output.o\
 			 s_update_memory.o\
 			 f_step.o\
+			 s_alloc.o\
 
 
 # linking: the target depends on the objects
@@ -33,10 +34,20 @@ f_step.o: f_step.f90
 	gfortran -ffree-form -c f_step.f90
 m_global.o: m_global.f90
 	gfortran -ffree-form -c m_global.f90
+s_alloc.o: s_alloc.f90
+	gfortran -ffree-form -c s_alloc.f90
 
 
 
 clean:
 	rm -fr $(objs)
 	rm -fr *.dat
+	rm -fr *.o
 	rm -fr *.mod
+
+
+run:
+	./runme
+
+animate: 
+	python animate.py
