@@ -4,8 +4,12 @@ target = runme
 # macro defininf the list of object files
 # objects are recompiled in the order in which they appear in the list
 # NOTE: TABS not required while defining macros
-objs = module_file.o\
-       main.o\
+objs = main.o\
+			 m_global.o\
+			 s_init.o\
+			 s_save_output.o\
+			 s_update_memory.o\
+			 f_step.o\
 
 
 # linking: the target depends on the objects
@@ -14,15 +18,25 @@ $(target):$(objs)
 	gfortran -ffree-form $(objs) -o $(target)
 
 #dependencies:
-main.o: main.f90 m_global.mod m_routines.mod
+main.o: main.f90 m_global.mod
 	gfortran -ffree-form -c main.f90
 
-m_routines.mod: module_file.f90
-	gfortran -ffree-form -c module_file.f90
-m_global.mod: module_file.f90
-	gfortran -ffree-form -c module_file.f90
+m_global.mod: m_global.o
+
+s_init.o: s_init.f90
+	gfortran -ffree-form -c s_init.f90
+s_save_output.o: s_save_output.f90
+	gfortran -ffree-form -c s_save_output.f90
+s_update_memory.o: s_update_memory.f90
+	gfortran -ffree-form -c s_update_memory.f90
+f_step.o: f_step.f90
+	gfortran -ffree-form -c f_step.f90
+m_global.o: m_global.f90
+	gfortran -ffree-form -c m_global.f90
+
 
 
 clean:
 	rm -fr $(objs)
 	rm -fr *.dat
+	rm -fr *.mod
