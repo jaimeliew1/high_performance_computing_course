@@ -2,6 +2,9 @@
 # Created by https://www.gitignore.io/api/python,fortran
 # Edit at https://www.gitignore.io/?templates=python,fortran
 
+runme
+*.gif
+
 ### Fortran ###
 # Prerequisites
 *.d
