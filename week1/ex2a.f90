@@ -1,4 +1,5 @@
 PROGRAM main
+  ! An example of using interfaces
   REAL, DIMENSION ( : ) , POINTER :: my_data
   INTEGER :: n, status
 
@@ -35,8 +36,8 @@ END SUBROUTINE sub
 
 SUBROUTINE init (DATA, n, info)
   REAL, DIMENSION(*) :: DATA
-
   INTEGER :: n, info
+
   DO i=1, n
     DATA(i) = -i
   ENDDO

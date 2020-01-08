@@ -1,4 +1,6 @@
 PROGRAM main
+  ! Testing the limits of the stack memory by performing a swap of two large arrays
+  
   ! INTEGER, PARAMETER :: n = 698169 ! This one fails for automatic arrays
   !INTEGER, PARAMETER :: n = 698168 ! This one passes for automatic arrays
   INTEGER, PARAMETER :: n =  2000000 !

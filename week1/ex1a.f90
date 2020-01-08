@@ -5,8 +5,8 @@ PROGRAM test
   READ(*,*) j,n
   DO i=1,n
      IF (i.EQ.j) EXIT
-     !i = i + 10 ! does this compile ?
+     !i = i + 10 ! does this compile ? NO
   ENDDO
   k = i
-  PRINT*,'k = ',k
+  PRINT*,'k = ', k
 END PROGRAM test

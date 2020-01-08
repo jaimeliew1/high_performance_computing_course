@@ -26,23 +26,8 @@ main.o: main.f90 m_global.mod
 
 m_global.mod: m_global.o
 
-# The following is shorthand for the commented out section below.
 %.o: %.f90
 	$(FC) $(FFLAGS) -c $<
-
-# s_init.o: s_init.f90
-# 	$(FC) $(FFLAGS) -c s_init.f90
-# s_save_output.o: s_save_output.f90
-# 	$(FC) $(FFLAGS) -c s_save_output.f90
-# s_update_memory.o: s_update_memory.f90
-# 	$(FC) $(FFLAGS) -c s_update_memory.f90
-# f_step.o: f_step.f90
-# 	$(FC) $(FFLAGS) -c f_step.f90
-# m_global.o: m_global.f90
-# 	$(FC) $(FFLAGS) -c m_global.f90
-# s_alloc.o: s_alloc.f90
-# 	$(FC) $(FFLAGS) -c s_alloc.f90
-
 
 
 clean:

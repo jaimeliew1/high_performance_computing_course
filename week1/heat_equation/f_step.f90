@@ -1,4 +1,5 @@
-FUNCTION step(T_old, D, N, dx, dt) ! TO BE FINISHED!
+FUNCTION step(T_old, D, N, dx, dt)
+  ! Performs a single step of the heat equation solver
   REAL, DIMENSION(:, :) :: T_old
   INTEGER :: N
   REAL :: dx, dt, D

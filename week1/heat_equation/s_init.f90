@@ -1,4 +1,5 @@
 SUBROUTINE init(N, D, T_max, T, T_old, dx, dt, N_iter)
+  ! Initialises variables for the heat equation solver.
   IMPLICIT NONE
   INTEGER, INTENT(in) :: N  ! Number of grid points on x and y direction
   REAL, INTENT(in) :: D

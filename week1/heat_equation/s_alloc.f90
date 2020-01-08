@@ -1,4 +1,5 @@
 SUBROUTINE salloc(field, Nx, Ny, info)
+  ! Allocates an array of size Nx by Ny using SINGLE floating point precision.
   INTEGER, PARAMETER :: MK = KIND(1.0E0)
   REAL(MK), DIMENSION(:, :), ALLOCATABLE, INTENT(out):: field
   INTEGER, INTENT(in) :: Nx, Ny
@@ -10,6 +11,7 @@ SUBROUTINE salloc(field, Nx, Ny, info)
 END SUBROUTINE salloc
 
 SUBROUTINE dalloc(field, Nx, Ny, info)
+  ! Allocates an array of size Nx by Ny using DOUBLE floating point precision.
   INTEGER, PARAMETER :: MK = KIND(1.0D0)
   REAL(MK), DIMENSION(:, :), ALLOCATABLE, INTENT(out):: field
   INTEGER, INTENT(in) :: Nx, Ny

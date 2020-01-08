@@ -2,7 +2,6 @@ SUBROUTINE save_output(fileroot, T, N, dx, step_no)
   ! Saves the temperature field to file for a given fileroot. If a step number
   ! is provided, the step number is appended to the fileroot.
   ! The output filename receives the extension .dat.
-
   IMPLICIT NONE
   CHARACTER(LEN=*), INTENT(in) :: fileroot
   REAL, DIMENSION(:,:) :: T
