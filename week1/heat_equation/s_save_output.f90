@@ -1,12 +1,12 @@
-SUBROUTINE save_output(fileroot, T, N, dx, step_no)
+SUBROUTINE save_output(fileroot, T, Nx, Ny, dx, dy, step_no)
   ! Saves the temperature field to file for a given fileroot. If a step number
   ! is provided, the step number is appended to the fileroot.
   ! The output filename receives the extension .dat.
   IMPLICIT NONE
   CHARACTER(LEN=*), INTENT(in) :: fileroot
   REAL, DIMENSION(:,:) :: T
-  INTEGER :: N
-  REAL :: dx
+  INTEGER :: Nx, Ny
+  REAL :: dx, dy
   INTEGER, OPTIONAL :: step_no
 
   INTEGER i, j
@@ -19,9 +19,9 @@ SUBROUTINE save_output(fileroot, T, N, dx, step_no)
   ENDIF
 
   OPEN(10, FILE=filename)
-  DO j=1,N
-     DO i=1,N
-        WRITE(10,'(3E12.4)') REAL(i-1)*dx, REAL(j-1)*dx, T(i,j)
+  DO j=1,Ny
+     DO i=1,Nx
+        WRITE(10,'(3E12.4)') REAL(i-1)*dx, REAL(j-1)*dy, T(i,j)
      ENDDO
      WRITE(10,'(A)') ! Will produce a new empty line – and tell gnuplot to lift the pen
   ENDDO

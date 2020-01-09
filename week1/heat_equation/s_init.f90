@@ -1,11 +1,11 @@
-SUBROUTINE init(N, D, T_max, T, T_old, dx, dt, N_iter)
+SUBROUTINE init(Nx, Ny, D, T_max, T, T_old, dx, dy, dt, N_iter)
   ! Initialises variables for the heat equation solver.
   IMPLICIT NONE
-  INTEGER, INTENT(in) :: N  ! Number of grid points on x and y direction
+  INTEGER, INTENT(in) :: Nx, Ny  ! Number of grid points on x and y direction
   REAL, INTENT(in) :: D
   REAL, INTENT(in) :: T_max
   REAL, DIMENSION(:,:), ALLOCATABLE :: T, T_old
-  REAL, INTENT(out) :: dx, dt
+  REAL, INTENT(out) :: dx, dy, dt
   INTEGER, INTENT(out) :: N_iter
 
   INTEGER :: i, j, info
@@ -30,12 +30,13 @@ SUBROUTINE init(N, D, T_max, T, T_old, dx, dt, N_iter)
      END SUBROUTINE dalloc
   END INTERFACE alloc
 
-  call alloc(T, N, N, info)
-  call alloc(T_old, N, N, info)
+  call alloc(T, Nx, Ny, info)
+  call alloc(T_old, Nx, Ny, info)
 
 
-  dx = 1.0/(REAL(N) - 1)
-  fourier_limit = dx**2/(4*D)
+  dx = 1.0/(REAL(Nx) - 1)
+  dy = 1.0/(REAL(Ny) - 1)
+  fourier_limit = max(dx, dy)**2/(4*D)
   dt = fourier_limit
   N_iter = T_max/dt + 1
 
@@ -44,18 +45,20 @@ SUBROUTINE init(N, D, T_max, T, T_old, dx, dt, N_iter)
 
   ! Set boundary conditions
   T_old(1, :) = 1
-  T_old(N, :) = 1
+  T_old(Nx, :) = 1
   T_old(:, 1) = 1
-  T_old(:, N) = 1
+  T_old(:, Ny) = 1
 
   T(1, :) = 1
-  T(N, :) = 1
+  T(Nx, :) = 1
   T(:, 1) = 1
-  T(:, N) = 1
+  T(:, Ny) = 1
 
 
-  PRINT*, 'N: ', N
+  PRINT*, 'Nx: ', Nx
+  PRINT*, 'Ny: ', Ny
   PRINT*, 'dx: ', dx
+  PRINT*, 'dy: ', dy
   PRINT*, 'dt: ', dt
   PRINT*, 'fourier_limit: ', fourier_limit
   PRINT*, 'N_iter: ', N_iter
