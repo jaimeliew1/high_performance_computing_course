@@ -55,11 +55,11 @@ SUBROUTINE init(Nx, Ny, D, T_max, T, T_old, dx, dy, dt, N_iter)
   T(:, Ny) = 1
 
 
-  PRINT*, 'Nx: ', Nx
-  PRINT*, 'Ny: ', Ny
-  PRINT*, 'dx: ', dx
-  PRINT*, 'dy: ', dy
-  PRINT*, 'dt: ', dt
-  PRINT*, 'fourier_limit: ', fourier_limit
-  PRINT*, 'N_iter: ', N_iter
+  ! PRINT*, 'Nx: ', Nx
+  ! PRINT*, 'Ny: ', Ny
+  ! PRINT*, 'dx: ', dx
+  ! PRINT*, 'dy: ', dy
+  ! PRINT*, 'dt: ', dt
+  ! PRINT*, 'fourier_limit: ', fourier_limit
+  ! PRINT*, 'N_iter: ', N_iter
 END SUBROUTINE init

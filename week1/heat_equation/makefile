@@ -13,6 +13,7 @@ objs = main.o\
 			 s_update_memory.o\
 			 f_step.o\
 			 s_alloc.o\
+			 s_diagnostic.o\
 
 
 # linking: the target depends on the objects
