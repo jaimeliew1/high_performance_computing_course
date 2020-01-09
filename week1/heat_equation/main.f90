@@ -7,8 +7,13 @@ PROGRAM main
   IMPLICIT NONE
 
   INTERFACE
+     SUBROUTINE read_input(filename, Nx, Ny, D, T_max)
+       CHARACTER(len=*), INTENT(in) :: filename
+       INTEGER, INTENT(out) :: Nx, Ny
+       REAL, INTENT(out) :: D, T_max
+     END SUBROUTINE read_input
+
      SUBROUTINE init(Nx, Ny, D, T_max, T, T_old, dx, dy, dt, N_iter)
-       IMPLICIT NONE
        INTEGER, INTENT(in) :: Nx, Ny  ! Number of grid points on x and y direction
        REAL, INTENT(in) :: D
        REAL, INTENT(in) :: T_max
@@ -18,7 +23,6 @@ PROGRAM main
      END SUBROUTINE init
 
      SUBROUTINE save_output(fileroot, T, Nx, Ny, dx, dy, step_no)
-       IMPLICIT NONE
        CHARACTER(LEN=*), INTENT(in) :: fileroot
        REAL, DIMENSION(:,:) :: T
        INTEGER :: Nx, Ny
@@ -30,7 +34,7 @@ PROGRAM main
        REAL, DIMENSION(:, :), INTENT(inout) :: A, A_old
      END SUBROUTINE update_memory
 
-     FUNCTION step(T_old, D, Nx, Ny, dx, dy, dt) ! TO BE FINISHED!
+     FUNCTION step(T_old, D, Nx, Ny, dx, dy, dt)
        REAL, DIMENSION(:, :) :: T_old
        INTEGER :: Nx, Ny
        REAL :: dx, dy, dt, D
@@ -38,7 +42,7 @@ PROGRAM main
      END FUNCTION step
 
      SUBROUTINE diagnostic(step_no, T, close_file)
-       integer, intent(in) :: step_no
+       INTEGER, INTENT(in) :: step_no
        REAL, DIMENSION(:, :), INTENT(in) :: T
        LOGICAL, OPTIONAL :: close_file
      END SUBROUTINE diagnostic
@@ -55,13 +59,15 @@ PROGRAM main
   PRINT*, 'Date: ', date(7:8), '/',date(5:6), '/',date(1:4)
   PRINT*, 'Time: ', time(1:2), ':',time(3:4), ':',time(5:)
 
+  CALL read_input('params.in', Nx, Ny, D, T_max)
+
   CALL init(Nx, Ny, D, T_max, T, T_old, dx, dy, dt, N_iter)
 
   ! Solve the heat equation iteratively
   CALL SYSTEM_CLOCK(COUNT=t_start, COUNT_RATE=count_rate)
   CALL CPU_TIME(TIME=cpu_t_start)
 
-  !!!!! MAIN LOOP !!!!!
+!!!!! MAIN LOOP !!!!!
   DO i = 1, N_iter
      T = step(T_old, D, Nx, Ny, dx, dy, dt)
      CALL update_memory(T, T_old)
@@ -71,7 +77,7 @@ PROGRAM main
      ENDIF
   ENDDO
 
-  call diagnostic(i, T, close_file=.TRUE.)
+  CALL diagnostic(i, T, close_file=.TRUE.)
   CALL SYSTEM_CLOCK(COUNT=t_stop)
   CALL CPU_TIME(TIME=cpu_t_stop)
 

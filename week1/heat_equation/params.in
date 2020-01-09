@@ -1,0 +1,6 @@
+Nx = 21
+Ny = 21
+D = 1
+
+this line doesn't do anything
+T_max = 0.125

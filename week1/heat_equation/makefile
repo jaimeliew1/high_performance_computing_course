@@ -14,6 +14,7 @@ objs = main.o\
 			 f_step.o\
 			 s_alloc.o\
 			 s_diagnostic.o\
+			 s_read_input.o\
 
 
 # linking: the target depends on the objects
@@ -37,11 +38,16 @@ clean:
 	rm -fr *.o
 	rm -fr *.mod
 
-# Example of running other targets from a target using the inbuilt $(MAKE) macro
 run:
 	./$(target)
-	$(MAKE) animate
-	$(MAKE) clean
+
 
 animate:
 	python animate.py
+
+
+# Example of running other targets from a target using the inbuilt $(MAKE) macro
+runall:
+	$(MAKE) run
+	$(MAKE) animate
+	$(MAKE) clean
