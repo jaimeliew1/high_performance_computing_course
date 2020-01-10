@@ -1,39 +1,55 @@
 
-#macro defining the target ie executable
+#----------------------------------------------------------------------
+#  Makefile : heat equation
+#  Version  : 1.0
+#  Author   : Jaime Liew (jyli@dtu.dk)
+#  Created  : 10/1/2020
+#----------------------------------------------------------------------
+# macro defining the target ie executable
 target = runme
 FC = gfortran
 FFLAGS = -ffree-form
-# macro defininf the list of object files
-# objects are recompiled in the order in which they appear in the list
-# NOTE: TABS not required while defining macros
-objs = main.o\
-			 m_global.o\
-			 s_init.o\
-			 s_save_output.o\
-			 s_update_memory.o\
-			 f_step.o\
-			 s_alloc.o\
-			 s_diagnostic.o\
-			 s_read_input.o\
+#----------------------------------------------------------------------
+#  Default target
+#----------------------------------------------------------------------
+all: $(target)
 
+#----------------------------------------------------------------------
+#  Object files:
+#  NOTE: you HAVE to sort the objects files such that no file will
+#  depend on files below it ! in this example, the diffuse2.f and .o
+#  depends on all he module files (i named them m_*.f), and the m_init
+#  depends (USE) the m_diffuse; thus m_diffuse HAS to be compiled
+#  before m_init and before diffuse2
+#----------------------------------------------------------------------
+objs = m_global.o\
+			 m_save_output.o\
+			 m_update_memory.o\
+			 m_step.o\
+			 m_alloc.o\
+			 m_init.o\
+			 m_diagnostic.o\
+			 m_read_input.o\
+			  main.o\
 
-# linking: the target depends on the objects
-#if objects are newer than the arget they are re-linked
-$(target):$(objs)
-	$(FC) $(FFLAGS) $(objs) -o $(target)
-
-#dependencies:
-main.o: main.f90 m_global.mod
-	$(FC) $(FFLAGS) -c main.f90
-
-m_global.mod: m_global.o
-
+#----------------------------------------------------------------------
+#  Dependencies:
+#----------------------------------------------------------------------
 %.o: %.f90
 	$(FC) $(FFLAGS) -c $<
 
 
+#----------------------------------------------------------------------
+#  link
+# if objects are newer than the arget they are re-linked
+#----------------------------------------------------------------------
+
+$(target):$(objs)
+	$(FC) $(FFLAGS) $(objs) -o $(target)
+
 clean:
 	rm -fr $(objs)
+	rm -fr diff*.dat
 	rm -fr *.dat
 	rm -fr *.o
 	rm -fr *.mod

@@ -3,50 +3,16 @@
 
 PROGRAM main
   USE m_global, ONLY: Nx, Ny, D, T_max, T, T_old, dx, dy, dt, N_iter
+  USE m_read_input, ONLY: read_input
+  USE m_init, ONLY: init
+  USE m_update_memory, ONLY: update_memory
+  USE m_step, ONLY: step
+  USE m_save_output, ONLY: save_output
+  USE m_diagnostic, ONLY: diagnostic
   !USE m_routines
   IMPLICIT NONE
 
-  INTERFACE
-     SUBROUTINE read_input(filename, Nx, Ny, D, T_max)
-       CHARACTER(len=*), INTENT(in) :: filename
-       INTEGER, INTENT(out) :: Nx, Ny
-       REAL, INTENT(out) :: D, T_max
-     END SUBROUTINE read_input
 
-     SUBROUTINE init(Nx, Ny, D, T_max, T, T_old, dx, dy, dt, N_iter)
-       INTEGER, INTENT(in) :: Nx, Ny  ! Number of grid points on x and y direction
-       REAL, INTENT(in) :: D
-       REAL, INTENT(in) :: T_max
-       REAL, DIMENSION(:,:), ALLOCATABLE :: T, T_old
-       REAL, INTENT(out) :: dx, dy, dt
-       INTEGER, INTENT(out) :: N_iter
-     END SUBROUTINE init
-
-     SUBROUTINE save_output(fileroot, T, Nx, Ny, dx, dy, step_no)
-       CHARACTER(LEN=*), INTENT(in) :: fileroot
-       REAL, DIMENSION(:,:) :: T
-       INTEGER :: Nx, Ny
-       REAL :: dx, dy
-       INTEGER, OPTIONAL :: step_no
-     END SUBROUTINE save_output
-
-     SUBROUTINE update_memory(A, A_old)
-       REAL, DIMENSION(:, :), INTENT(inout) :: A, A_old
-     END SUBROUTINE update_memory
-
-     FUNCTION step(T_old, D, Nx, Ny, dx, dy, dt)
-       REAL, DIMENSION(:, :) :: T_old
-       INTEGER :: Nx, Ny
-       REAL :: dx, dy, dt, D
-       REAL, DIMENSION(:, :), ALLOCATABLE :: step
-     END FUNCTION step
-
-     SUBROUTINE diagnostic(step_no, T, close_file)
-       INTEGER, INTENT(in) :: step_no
-       REAL, DIMENSION(:, :), INTENT(in) :: T
-       LOGICAL, OPTIONAL :: close_file
-     END SUBROUTINE diagnostic
-  END INTERFACE
 
   INTEGER :: i, j
   INTEGER:: t_start, t_stop, count_rate ! system clock variables
