@@ -1,9 +1,13 @@
 MODULE m_read_input
+  INTEGER, PARAMETER :: MK = KIND(1.0E0)
+
 CONTAINS
+
   SUBROUTINE read_input(filename, Nx, Ny, D, T_max)
+    IMPLICIT NONE
     CHARACTER(len=*), INTENT(in) :: filename
     INTEGER, INTENT(out) :: Nx, Ny
-    REAL, INTENT(out) :: D, T_max
+    REAL(MK), INTENT(out) :: D, T_max
     CHARACTER(len=256) :: buffer, key, val
     INTEGER :: sep_loc, ios
 

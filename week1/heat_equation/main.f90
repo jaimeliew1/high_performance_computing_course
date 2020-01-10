@@ -1,5 +1,7 @@
-! Exercise 1b: FORTRAN program to solve the 2D heat equation
-! author: Jaime Liew (jyli@dtu.dk)
+! FORTRAN program to solve the 2D heat equation
+!  Version  : 1.0
+!  Author   : Jaime Liew (jyli@dtu.dk)
+!  Created  : 10/1/2020
 
 PROGRAM main
   USE m_global, ONLY: Nx, Ny, D, T_max, T, T_old, dx, dy, dt, N_iter
@@ -9,15 +11,12 @@ PROGRAM main
   USE m_step, ONLY: step
   USE m_save_output, ONLY: save_output
   USE m_diagnostic, ONLY: diagnostic
-  !USE m_routines
+
   IMPLICIT NONE
-
-
 
   INTEGER :: i, j
   INTEGER:: t_start, t_stop, count_rate ! system clock variables
   REAL :: cpu_t_start, cpu_t_stop ! CPU clock variables
-
   CHARACTER(len=8) :: date
   CHARACTER(len=10) :: time
 
@@ -29,26 +28,26 @@ PROGRAM main
 
   CALL init(Nx, Ny, D, T_max, T, T_old, dx, dy, dt, N_iter)
 
-  ! Solve the heat equation iteratively
   CALL SYSTEM_CLOCK(COUNT=t_start, COUNT_RATE=count_rate)
   CALL CPU_TIME(TIME=cpu_t_start)
 
-!!!!! MAIN LOOP !!!!!
+  !!!!! MAIN LOOP !!!!! Solve the heat equation iteratively
   DO i = 1, N_iter
      T = step(T_old, D, Nx, Ny, dx, dy, dt)
      CALL update_memory(T, T_old)
      CALL save_output('diff', T, Nx, Ny, dx, dy, i)
+
      IF (MOD(i, 10) == 0) THEN
         CALL diagnostic(i, T)
      ENDIF
   ENDDO
 
-  CALL diagnostic(i, T, close_file=.TRUE.)
   CALL SYSTEM_CLOCK(COUNT=t_stop)
   CALL CPU_TIME(TIME=cpu_t_stop)
-
-  CALL save_output('final', T, Nx, Ny, dx, dy)
-
   PRINT*, 'System time elapsed [s]: ', (t_stop-t_start)/REAL(count_rate)
   PRINT*, 'CPU time elapsed [s]: ', cpu_t_stop - cpu_t_start
+
+  CALL diagnostic(i, T, close_file=.TRUE.)
+  CALL save_output('final', T, Nx, Ny, dx, dy)
+
 END PROGRAM main

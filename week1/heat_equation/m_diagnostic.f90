@@ -1,11 +1,12 @@
 MODULE m_diagnostic
+  INTEGER, PARAMETER :: MK = KIND(1.0E0)
 CONTAINS
   SUBROUTINE diagnostic(step_no, T, close_file)
     ! Writes diagnostic information (minimum value of temperature field)
     ! to an output file, diag.dat
     IMPLICIT NONE
     INTEGER, INTENT(in) :: step_no
-    REAL, DIMENSION(:, :), INTENT(in) :: T
+    REAL(MK), DIMENSION(:, :), INTENT(in) :: T
     LOGICAL, OPTIONAL :: close_file
 
     CHARACTER(len=20), PARAMETER :: filename = 'diag.dat'
@@ -22,7 +23,6 @@ CONTAINS
        WRITE(20, '(6A)') 'Date: ', date(7:8), '/',date(5:6), '/',date(1:4)
        WRITE(20, '(6A)') 'Time: ', time(1:2), ':',time(3:4), ':',time(5:)
        WRITE(20, '(A)') 'step_no min_val'
-
     ENDIF
 
     IF (PRESENT(close_file)) THEN
