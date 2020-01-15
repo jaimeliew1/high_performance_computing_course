@@ -1,8 +1,8 @@
-MODULE m_jacobi
+MODULE m_jacobi_naive1
   INTEGER, PARAMETER :: MK = KIND(1.0E0)
 CONTAINS
 
-  SUBROUTINE jacobi(U, U_old, N, f, dx, N_iter, thres)
+  SUBROUTINE jacobi_naive1(U, U_old, N, f, dx, N_iter, thres)
     USE m_diagnostic, ONLY: diagnostic
     ! Performs a single step of the heat equation solver
     REAL(MK), DIMENSION(:, :), INTENT(INOUT) :: U, U_old
@@ -35,10 +35,6 @@ CONTAINS
        !$OMP END PARALLEL
        norm = SQRT(norm)
 
-       IF (MOD(k, 100) == 0) THEN
-          CALL diagnostic(k, norm)
-       ENDIF
-
        IF (norm < thres) THEN
           converged = .TRUE.
           EXIT
@@ -49,12 +45,12 @@ CONTAINS
     ENDDO
 
     IF (converged) THEN
-       PRINT*, 'iterations: ', k
+       !PRINT*, 'iterations: ', k
     ELSE
        PRINT*, 'NO CONVERGENCE'
     ENDIF
 
     CALL diagnostic(k, norm, .TRUE.)
-  END SUBROUTINE jacobi
+  END SUBROUTINE jacobi_naive1
 
-END MODULE m_jacobi
+END MODULE m_jacobi_naive1

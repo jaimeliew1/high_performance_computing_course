@@ -3,10 +3,10 @@ MODULE m_read_input
 
 CONTAINS
 
-  SUBROUTINE read_input(filename, N, N_iter, thres)
+  SUBROUTINE read_input(filename, N, N_iter, thres, strategy)
     IMPLICIT NONE
     CHARACTER(len=*), INTENT(in) :: filename
-    INTEGER, INTENT(out) :: N, N_iter
+    INTEGER, INTENT(out) :: N, N_iter, strategy
     REAL(MK), INTENT(out) :: thres
     CHARACTER(len=256) :: buffer, key, val
     INTEGER :: sep_loc, ios
@@ -38,13 +38,16 @@ CONTAINS
 
        IF (TRIM(key) == 'N') THEN
           READ(val, *) N
-          PRINT*, TRIM(key), '=', N
+          !PRINT*, TRIM(key), '=', N
        ELSEIF (TRIM(key) == 'N_iter') THEN
           READ(val, *) N_iter
-          PRINT*, TRIM(key), '=', N_iter
+          !PRINT*, TRIM(key), '=', N_iter
        ELSEIF (TRIM(key) == 'thres') THEN
           READ(val, *) thres
-          PRINT*, TRIM(key), '=', thres
+          !PRINT*, TRIM(key), '=', thres
+       ELSEIF (TRIM(key) == 'strategy') THEN
+          READ(val, *) strategy
+          !PRINT*, TRIM(key), '=', strategy
        ENDIF
 
 

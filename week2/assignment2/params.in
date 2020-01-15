@@ -1,3 +1,4 @@
-N = 50
+N = 100
 N_iter = 100000
 thres = 1e-4
+strategy = 4

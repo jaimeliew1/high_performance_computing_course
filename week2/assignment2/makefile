@@ -27,7 +27,10 @@ objs = m_global.o\
 			m_init.o\
 			m_read_input.o\
 			m_diagnostic.o\
-			m_jacobi.o\
+			m_jacobi_naive1.o\
+			m_jacobi_naive2.o\
+			m_jacobi_optimised1.o\
+			m_jacobi_optimised2.o\
 			m_gauss_seidel.o\
 			m_save_output.o\
 			main.o\
@@ -57,6 +60,8 @@ clean:
 
 run:
 	./$(target)
+
+
 
 
 plot:
