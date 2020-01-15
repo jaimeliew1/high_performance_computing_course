@@ -8,8 +8,9 @@ PROGRAM main
   USE m_read_input, ONLY: read_input
   USE m_init, ONLY: init
   USE m_jacobi, ONLY: jacobi
+  USE m_gauss_seidel, ONLY: gauss_seidel
   USE m_save_output, ONLY: save_output
-  
+
 
   IMPLICIT NONE
 
@@ -32,6 +33,7 @@ PROGRAM main
 
 !!!!! MAIN LOOP !!!!! Solve the heat equation iteratively
   call jacobi(U, U_old, N, f, dx, N_iter, thres)
+  !call gauss_seidel(U, U_old, N, f, dx, N_iter, thres)
 
   CALL SYSTEM_CLOCK(COUNT=t_stop)
   CALL CPU_TIME(TIME=cpu_t_stop)

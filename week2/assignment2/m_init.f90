@@ -16,6 +16,8 @@ CONTAINS
     CALL alloc(U, N+2, N+2, info)
     CALL alloc(U_old, N+2, N+2, info)
     CALL alloc(f, N+2, N+2, info)
+    U = 0
+    U_old = 0
     ALLOCATE(coords(N+2))
 
     dx = 2/REAL(N+1)

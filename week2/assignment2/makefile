@@ -28,6 +28,7 @@ objs = m_global.o\
 			m_read_input.o\
 			m_diagnostic.o\
 			m_jacobi.o\
+			m_gauss_seidel.o\
 			m_save_output.o\
 			main.o\
 
