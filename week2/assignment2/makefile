@@ -8,7 +8,7 @@
 # macro defining the target ie executable
 target = runme
 FC = gfortran
-FFLAGS = -ffree-form #fopenmp
+FFLAGS = -ffree-form -fopenmp
 #----------------------------------------------------------------------
 #  Default target
 #----------------------------------------------------------------------

@@ -19,15 +19,20 @@ CONTAINS
 
     DO k=1,N_iter
        norm = 0
+       !$OMP PARALLEL
+       !$OMP DO
        DO i=2,N+1
           DO j=2,N+1
              U(i, j) = a_quarter*(U_old(i, j-1) + U_old(i,j+1) &
                   + U_old(i-1, j) + U_old(i+1, j)&
                   + dx**2*f(i, j))
+            !$OMP CRITICAL
              norm = norm + (U(i, j) - U_old(i, j))**2
+            !$OMP END CRITICAL
           ENDDO
        ENDDO
-
+       !$OMP END DO
+       !$OMP END PARALLEL
        norm = SQRT(norm)
 
        IF (MOD(k, 100) == 0) THEN
