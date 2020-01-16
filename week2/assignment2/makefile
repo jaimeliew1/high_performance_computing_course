@@ -7,8 +7,10 @@
 #----------------------------------------------------------------------
 # macro defining the target ie executable
 target = runme
-FC = gfortran
-FFLAGS = -ffree-form -fopenmp
+#FC = gfortran
+#FFLAGS = -ffree-form -fopenmp
+FC = f90
+FFLAGS = -free -xopenmp -fast  -g -xloopinfo -xvpara -xipo -xinline=no
 #----------------------------------------------------------------------
 #  Default target
 #----------------------------------------------------------------------

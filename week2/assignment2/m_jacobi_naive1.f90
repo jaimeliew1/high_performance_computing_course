@@ -1,14 +1,15 @@
 MODULE m_jacobi_naive1
-  INTEGER, PARAMETER :: MK = KIND(1.0E0)
+  INTEGER, PARAMETER :: MK = KIND(1.0D0)
 CONTAINS
 
-  SUBROUTINE jacobi_naive1(U, U_old, N, f, dx, N_iter, thres)
+  SUBROUTINE jacobi_naive1(U, U_old, N, f, dx, N_iter, thres, actual_iters)
     USE m_diagnostic, ONLY: diagnostic
     ! Performs a single step of the heat equation solver
     REAL(MK), DIMENSION(:, :), INTENT(INOUT) :: U, U_old
     REAL(MK), DIMENSION(:, :), INTENT(IN) :: f
     INTEGER, INTENT(IN) :: N, N_iter
     REAL(MK), INTENT(IN) :: dx, thres
+    INTEGER, INTENT(OUT) :: actual_iters
 
     REAL(MK) :: a_quarter = 1/4.0
     REAL(MK) :: norm
@@ -37,6 +38,7 @@ CONTAINS
 
        IF (norm < thres) THEN
           converged = .TRUE.
+          actual_iters = k
           EXIT
        ENDIF
 

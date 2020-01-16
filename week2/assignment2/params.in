@@ -1,4 +1,4 @@
-N = 100
+N = 200
 N_iter = 100000
-thres = 1e-4
+thres = 1e-3
 strategy = 4

@@ -1,5 +1,5 @@
 MODULE m_gauss_seidel
-  INTEGER, PARAMETER :: MK = KIND(1.0E0)
+  INTEGER, PARAMETER :: MK = KIND(1.0D0)
 CONTAINS
 
   SUBROUTINE gauss_seidel(U, U_old, N, f, dx, N_iter, thres)

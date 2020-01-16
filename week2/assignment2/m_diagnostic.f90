@@ -1,5 +1,5 @@
 MODULE m_diagnostic
-  INTEGER, PARAMETER :: MK = KIND(1.0E0)
+  INTEGER, PARAMETER :: MK = KIND(1.0D0)
 CONTAINS
   SUBROUTINE diagnostic(step_no, norm, close_file)
     ! Writes diagnostic information (minimum value of temperature field)

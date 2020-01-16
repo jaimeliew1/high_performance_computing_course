@@ -1,5 +1,5 @@
 MODULE m_init
-  INTEGER, PARAMETER :: MK = KIND(1.0E0)
+  INTEGER, PARAMETER :: MK = KIND(1.0D0)
 CONTAINS
   SUBROUTINE init(N, U, U_old, f, dx, coords)
     ! Initialises variables for the heat equation solver.
@@ -16,15 +16,22 @@ CONTAINS
     CALL alloc(U, N+2, N+2, info)
     CALL alloc(U_old, N+2, N+2, info)
     CALL alloc(f, N+2, N+2, info)
-    U = 0
-    U_old = 0
+
+    !$OMP PARALLEL DO
+    DO j=2,N+1
+       DO i=2,N+1
+          U(i, j) = 0
+          U_old(i, j) = 0
+       ENDDO
+    ENDDO
+    !$OMP END PARALLEL DO
+
     ALLOCATE(coords(N+2))
 
     dx = 2/REAL(N+1)
 
     DO i=1,N+2
        coords(i) = -1 + dx*(i-1)
-       !PRINT*,i, coords(i)
     ENDDO
 
 

@@ -1,55 +1,47 @@
 MODULE m_jacobi_optimised2
-  INTEGER, PARAMETER :: MK = KIND(1.0E0)
+  INTEGER, PARAMETER :: MK = KIND(1.0D0)
 CONTAINS
 
-  SUBROUTINE jacobi_optimised2(U, U_old, N, f, dx, N_iter, thres)
+  SUBROUTINE jacobi_optimised2(U, U_old, N, f, dx, N_iter, thres, actual_iters)
     USE m_diagnostic, ONLY: diagnostic
     REAL(MK), DIMENSION(:, :), INTENT(INOUT) :: U, U_old
     REAL(MK), DIMENSION(:, :), INTENT(IN) :: f
     INTEGER, INTENT(IN) :: N, N_iter
     REAL(MK), INTENT(IN) :: dx, thres
+    INTEGER, INTENT(OUT) :: actual_iters
 
     REAL(MK) :: a_quarter = 1/4.0
-    REAL(MK) :: norm, local_norm
+    REAL(MK) :: norm
     LOGICAL :: converged
     INTEGER :: i, j, k
     norm = 0
-    local_norm = 0
 
     converged = .FALSE.
 
-    !$OMP PARALLEL PRIVATE(local_norm)
+    !$OMP PARALLEL PRIVATE(i, j, k)
     DO k=1,N_iter
-       !$OMP DO
-       DO i=2,N+1
-          DO j=2,N+1
+       !$OMP DO REDUCTION(+: norm)
+       DO j=2,N+1
+          DO i=2,N+1
              U(i, j) = a_quarter*(U_old(i, j-1) + U_old(i,j+1) &
                   + U_old(i-1, j) + U_old(i+1, j)&
                   + dx**2*f(i, j))
-              local_norm = local_norm + (U(i, j) - U_old(i, j))**2
+
+             norm = norm + (U(i, j) - U_old(i, j))**2
           ENDDO
        ENDDO
        !$OMP END DO
 
-       !$OMP CRITICAL
-       norm = norm + local_norm
-       !$OMP END CRITICAL
+
 
        !$OMP SINGLE
        norm = SQRT(norm)
-       U_old = U
 
-       IF (MOD(k, 100) == 0) THEN
-          CALL diagnostic(k, norm)
-       ENDIF
 
        IF (norm < thres) THEN
-         !PRINT*, 'norm: ', norm
-         !PRINT*, 'iterations: ', k
+          !PRINT*, 'iterations: ', k
+          actual_iters = k
           converged = .TRUE.
-       ELSE
-          norm = 0
-          local_norm = 0
        ENDIF
        !$OMP END SINGLE
 
@@ -57,6 +49,14 @@ CONTAINS
           EXIT
        ENDIF
 
+       !$OMP DO
+       DO j=2,N+1
+          DO i=2,N+1
+             U_old(i, j) = U(i, j)
+          ENDDO
+       ENDDO
+       !$OMP END DO
+       norm = 0
 
     ENDDO
     !$OMP END PARALLEL

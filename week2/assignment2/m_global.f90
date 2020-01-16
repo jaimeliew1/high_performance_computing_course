@@ -1,5 +1,5 @@
 MODULE m_global
-  INTEGER, PARAMETER :: MK = KIND(1.0E0)
+  INTEGER, PARAMETER :: MK = KIND(1.0D0)
   INTEGER :: N ! Number of grid points on x and y direction
   INTEGER  :: N_iter
   REAL(mk) :: thres

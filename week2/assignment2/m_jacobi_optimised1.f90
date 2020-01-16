@@ -1,13 +1,14 @@
 MODULE m_jacobi_optimised1
-  INTEGER, PARAMETER :: MK = KIND(1.0E0)
+  INTEGER, PARAMETER :: MK = KIND(1.0D0)
 CONTAINS
 
-  SUBROUTINE jacobi_optimised1(U, U_old, N, f, dx, N_iter, thres)
+  SUBROUTINE jacobi_optimised1(U, U_old, N, f, dx, N_iter, thres, actual_iters)
     USE m_diagnostic, ONLY: diagnostic
     REAL(MK), DIMENSION(:, :), INTENT(INOUT) :: U, U_old
     REAL(MK), DIMENSION(:, :), INTENT(IN) :: f
     INTEGER, INTENT(IN) :: N, N_iter
     REAL(MK), INTENT(IN) :: dx, thres
+    INTEGER, INTENT(OUT) :: actual_iters
 
     REAL(MK) :: a_quarter = 1/4.0
     REAL(MK) :: norm, local_norm
@@ -18,12 +19,13 @@ CONTAINS
 
     converged = .FALSE.
 
-    !$OMP PARALLEL PRIVATE(local_norm)
+    !$OMP PARALLEL FIRSTPRIVATE(local_norm)
     DO k=1,N_iter
-      !$OMP SINGLE
+
       norm = 0
       local_norm = 0
-      !$OMP END SINGLE
+
+
        !$OMP DO
        DO i=2,N+1
           DO j=2,N+1
@@ -39,14 +41,15 @@ CONTAINS
        norm = norm + local_norm
        !$OMP END CRITICAL
 
+       !$OMP BARRIER
+
        !$OMP SINGLE
        norm = SQRT(norm)
        U_old = U
 
        IF (norm < thres) THEN
           converged = .TRUE.
-          !PRINT*, 'norm: ', norm
-          !PRINT*, 'iterations: ', k
+          actual_iters = k
        ENDIF
        !$OMP END SINGLE
 

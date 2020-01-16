@@ -1,5 +1,5 @@
 MODULE m_save_output
-  INTEGER, PARAMETER :: MK = KIND(1.0E0)
+  INTEGER, PARAMETER :: MK = KIND(1.0D0)
 CONTAINS
   SUBROUTINE save_output(fileroot, N, U, coords, step_no)
     ! Saves the temperature field to file for a given fileroot. If a step number
