@@ -9,7 +9,7 @@ CONTAINS
     INTEGER, INTENT(in) :: N
     REAL(MK), DIMENSION(:,:), ALLOCATABLE :: U, U_old, f
     REAL(MK), INTENT(out) :: dx
-    REAL(MK), DIMENSION(:), allocatable :: coords
+    REAL(MK), DIMENSION(:), ALLOCATABLE :: coords
 
     INTEGER :: i, j, info
 

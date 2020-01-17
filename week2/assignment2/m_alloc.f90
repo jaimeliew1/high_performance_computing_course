@@ -4,7 +4,7 @@ MODULE m_alloc
   END INTERFACE alloc
 
 CONTAINS
-  
+
   SUBROUTINE salloc(field, Nx, Ny, info)
     ! Allocates an array of size Nx by Ny using SINGLE floating point precision.
     INTEGER, PARAMETER :: MK = KIND(1.0E0)

@@ -1,8 +1,8 @@
-MODULE m_jacobi_naive2
+MODULE m_jacobi_optimised
   INTEGER, PARAMETER :: MK = KIND(1.0D0)
 CONTAINS
 
-  SUBROUTINE jacobi_naive2(U, U_old, N, f, dx, N_iter, thres, actual_iters)
+  SUBROUTINE jacobi_optimised(U, U_old, N, f, dx, N_iter, thres, actual_iters)
     USE m_diagnostic, ONLY: diagnostic
     REAL(MK), DIMENSION(:, :), INTENT(INOUT) :: U, U_old
     REAL(MK), DIMENSION(:, :), INTENT(IN) :: f
@@ -14,44 +14,50 @@ CONTAINS
     REAL(MK) :: norm
     LOGICAL :: converged
     INTEGER :: i, j, k
+    norm = 0
 
     converged = .FALSE.
 
-    !$OMP PARALLEL
+    !$OMP PARALLEL PRIVATE(i, j, k)
     DO k=1,N_iter
-
-      !$OMP SINGLE
-       norm = 0
-       !$OMP END SINGLE
-
-       !$OMP DO
-       DO i=2,N+1
-          DO j=2,N+1
+       !$OMP DO REDUCTION(+: norm)
+       DO j=2,N+1
+          DO i=2,N+1
              U(i, j) = a_quarter*(U_old(i, j-1) + U_old(i,j+1) &
                   + U_old(i-1, j) + U_old(i+1, j)&
                   + dx**2*f(i, j))
-              !$OMP CRITICAL
-               norm = norm + (U(i, j) - U_old(i, j))**2
-              !$OMP END CRITICAL
+
+             norm = norm + (U(i, j) - U_old(i, j))**2
           ENDDO
        ENDDO
        !$OMP END DO
 
 
+
        !$OMP SINGLE
        norm = SQRT(norm)
 
-       IF (norm < thres) THEN
-          converged = .TRUE.
-          actual_iters = k
-       ENDIF
 
-       U_old = U
+       IF (norm < thres) THEN
+          !PRINT*, 'iterations: ', k
+          actual_iters = k
+          converged = .TRUE.
+       ENDIF
        !$OMP END SINGLE
 
        IF (converged) THEN
           EXIT
        ENDIF
+
+       !$OMP DO
+       DO j=2,N+1
+          DO i=2,N+1
+             U_old(i, j) = U(i, j)
+          ENDDO
+       ENDDO
+       !$OMP END DO
+       norm = 0
+
     ENDDO
     !$OMP END PARALLEL
 
@@ -60,7 +66,6 @@ CONTAINS
        PRINT*, 'NO CONVERGENCE'
     ENDIF
 
-    CALL diagnostic(k, norm, .TRUE.)
-  END SUBROUTINE jacobi_naive2
+  END SUBROUTINE jacobi_optimised
 
-END MODULE m_jacobi_naive2
+END MODULE m_jacobi_optimised

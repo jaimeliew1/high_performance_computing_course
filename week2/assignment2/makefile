@@ -10,7 +10,10 @@ target = runme
 #FC = gfortran
 #FFLAGS = -ffree-form -fopenmp
 FC = f90
+# Optimised flags
 FFLAGS = -free -xopenmp -fast  -g -xloopinfo -xvpara -xipo -xinline=no
+# Unoptimised flags
+#FFLAGS = -free -xopenmp=noopt -g -xloopinfo -xvpara -xipo -xinline=no
 #----------------------------------------------------------------------
 #  Default target
 #----------------------------------------------------------------------
@@ -29,10 +32,8 @@ objs = m_global.o\
 			m_init.o\
 			m_read_input.o\
 			m_diagnostic.o\
-			m_jacobi_naive1.o\
-			m_jacobi_naive2.o\
-			m_jacobi_optimised1.o\
-			m_jacobi_optimised2.o\
+			m_jacobi_naive.o\
+			m_jacobi_optimised.o\
 			m_gauss_seidel.o\
 			m_save_output.o\
 			main.o\
@@ -62,9 +63,6 @@ clean:
 
 run:
 	./$(target)
-
-
-
 
 plot:
 	python single_plot.py
