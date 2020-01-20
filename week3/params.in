@@ -1,0 +1,10 @@
+Nx = 4097
+Ny = 4097
+D = 1
+
+this line doesn't do anything
+T_max = 1.475214958190918e-06
+
+!Nx = 21
+!Ny = 21
+!T_max = 0.125
