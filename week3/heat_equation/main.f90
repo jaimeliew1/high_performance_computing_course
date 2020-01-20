@@ -47,8 +47,9 @@ PROGRAM main
   CALL CPU_TIME(TIME=cpu_t_stop)
   PRINT*, 'System time elapsed [s]: ', (t_stop-t_start)/REAL(count_rate)
   PRINT*, 'CPU time elapsed [s]: ', cpu_t_stop - cpu_t_start
+  PRINT*, 'time per step [s]: ', (cpu_t_stop - cpu_t_start)/REAL(N_iter)
 
   CALL diagnostic(i, T, close_file=.TRUE.)
-  CALL save_output('final', T, Nx, Ny, dx, dy)
+  !CALL save_output('final', T, Nx, Ny, dx, dy)
 
 END PROGRAM main

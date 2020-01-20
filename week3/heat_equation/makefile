@@ -8,7 +8,7 @@
 # macro defining the target ie executable
 target = runme
 FC = gfortran
-FFLAGS = -ffree-form -Ofast
+FFLAGS = -ffree-form -O3
 #----------------------------------------------------------------------
 #  Default target
 #----------------------------------------------------------------------
@@ -35,7 +35,7 @@ objs = m_global.o\
 #----------------------------------------------------------------------
 #  Dependencies:
 #----------------------------------------------------------------------
-%.o: %.f90
+%.o: %.f90 makefile
 	$(FC) $(FFLAGS) -c $<
 
 
@@ -44,7 +44,7 @@ objs = m_global.o\
 # if objects are newer than the arget they are re-linked
 #----------------------------------------------------------------------
 
-$(target):$(objs)
+$(target):$(objs) makefile
 	$(FC) $(FFLAGS) $(objs) -o $(target)
 
 clean:
