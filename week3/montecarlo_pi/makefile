@@ -7,7 +7,7 @@
 #----------------------------------------------------------------------
 # macro defining the target ie executable
 target = runme
-FC = gfortran
+FC = mpifort
 FFLAGS = -ffree-form#-free -O3
 #----------------------------------------------------------------------
 #  Default target
@@ -45,5 +45,5 @@ clean:
 	rm -fr *.mod
 
 run:
-	./$(target)
-#mpirun -np 16 $(target)
+	#./$(target)
+	mpirun -np 4 $(target)
