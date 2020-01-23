@@ -49,7 +49,8 @@ CONTAINS
     IF (rank == 0) THEN
        T(1, :) = 1
        T_old(1, :) = 1
-    ELSEIF (rank == n_proc-1) THEN
+    ENDIF
+    IF (rank == n_proc-1) THEN
        T(Nx_local+2, :) = 1
        T_old(Nx_local+2, :) = 1
     ENDIF
