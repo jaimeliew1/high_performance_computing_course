@@ -16,18 +16,16 @@ CONTAINS
     CHARACTER(LEN=20) :: filename
 
     IF (PRESENT(step_no)) THEN
-       WRITE(filename,'(A,I6.6,A)') fileroot, step_no,'.dat'
+       WRITE(filename,'(A,I2.2,A)') fileroot, step_no,'.dat'
     ELSE
        filename = fileroot // '.dat' ! // is the append command
     ENDIF
 
     OPEN(10, FILE=filename)
-    DO j=1,Ny
-       DO i=1,Nx
-          WRITE(10,'(3E12.4)') REAL(i-1)*dx, REAL(j-1)*dy, T(i,j)
-       ENDDO
-       WRITE(10,'(A)') ! Will produce a new empty line – and tell gnuplot to lift the pen
+    DO i=1,Ny
+       WRITE(10, *) T(:, i)
     ENDDO
+
     CLOSE(10)
 
   END SUBROUTINE save_output

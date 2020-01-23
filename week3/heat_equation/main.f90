@@ -1,55 +1,51 @@
 ! FORTRAN program to solve the 2D heat equation
+! Parallelised using MPI
 !  Version  : 1.0
 !  Author   : Jaime Liew (jyli@dtu.dk)
-!  Created  : 10/1/2020
+!  Created  : 23/1/2020
 
 PROGRAM main
-  USE m_global, ONLY: Nx, Ny, D, T_max, T, T_old, dx, dy, dt, N_iter
+  USE m_global, ONLY: Nx, Ny, Nx_local, D, T_max, T, T_old, dx, dy, dt, N_iter
   USE m_read_input, ONLY: read_input
   USE m_init, ONLY: init
+  USE m_exchange_boundary, ONLY: exchange_boundary
   USE m_update_memory, ONLY: update_memory
   USE m_step, ONLY: step
   USE m_save_output, ONLY: save_output
   USE m_diagnostic, ONLY: diagnostic
 
   IMPLICIT NONE
-
+  INCLUDE 'mpif.h'
+  INTEGER :: rank, n_proc, ierror
+  INTEGER :: status(MPI_STATUS_SIZE)
   INTEGER :: i, j
-  INTEGER:: t_start, t_stop, count_rate ! system clock variables
-  REAL :: cpu_t_start, cpu_t_stop ! CPU clock variables
-  CHARACTER(len=8) :: date
-  CHARACTER(len=10) :: time
 
-  CALL DATE_AND_TIME(DATE=date, TIME=time)
-  PRINT*, 'Date: ', date(7:8), '/',date(5:6), '/',date(1:4)
-  PRINT*, 'Time: ', time(1:2), ':',time(3:4), ':',time(5:)
+  CALL MPI_init(ierror)
+  CALL MPI_COMM_rank(MPI_COMM_WORLD, rank, ierror)
+  CALL MPI_COMM_size(MPI_COMM_WORLD, n_proc, ierror)
 
-  CALL read_input('params.in', Nx, Ny, D, T_max)
+  CALL read_input('params.in', Nx, Ny, D, T_max, rank, n_proc)
 
-  CALL init(Nx, Ny, D, T_max, T, T_old, dx, dy, dt, N_iter)
+  CALL init(Nx, Ny, Nx_local, D, T_max, T, T_old, dx, dy, dt, N_iter, rank, n_proc)
 
-  PRINT*, 'T_iter', N_iter
-  CALL SYSTEM_CLOCK(COUNT=t_start, COUNT_RATE=count_rate)
-  CALL CPU_TIME(TIME=cpu_t_start)
+  PRINT*, 'I am process ', rank, '. My strip is ', Nx_local, ' points wide.'
 
 !!!!! MAIN LOOP !!!!! Solve the heat equation iteratively
   DO i = 1, N_iter
-     CALL step(T, T_old, D, Nx, Ny, dx, dy, dt)
+
+    ! Perform MPI data exchange (if there are multiple processes)
+     IF (n_proc > 1) THEN
+        CALL exchange_boundary(T_old, Nx_local, Ny, rank, n_proc)
+     ENDIF
+
+     CALL step(T, T_old, D, Nx_local+2, Ny+2, dx, dy, dt)
+
      CALL update_memory(T, T_old)
-     !CALL save_output('diff', T, Nx, Ny, dx, dy, i)
 
      IF (MOD(i, 10) == 0) THEN
-        CALL diagnostic(i, T)
      ENDIF
   ENDDO
 
-  CALL SYSTEM_CLOCK(COUNT=t_stop)
-  CALL CPU_TIME(TIME=cpu_t_stop)
-  PRINT*, 'System time elapsed [s]: ', (t_stop-t_start)/REAL(count_rate)
-  PRINT*, 'CPU time elapsed [s]: ', cpu_t_stop - cpu_t_start
-  PRINT*, 'time per step [s]: ', (cpu_t_stop - cpu_t_start)/REAL(N_iter)
-
-  CALL diagnostic(i, T, close_file=.TRUE.)
-  !CALL save_output('final', T, Nx, Ny, dx, dy)
-
+  CALL save_output('final', T_old(2:Nx_local+1, 2:Ny), Nx_local, Ny, dx, dy, step_no=rank)
+  CALL MPI_finalize(ierror)
 END PROGRAM main

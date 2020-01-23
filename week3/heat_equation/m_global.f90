@@ -1,6 +1,6 @@
 MODULE m_global
   INTEGER, PARAMETER :: MK = KIND(1.0E0)
-  INTEGER :: Nx, Ny ! Number of grid points on x and y direction
+  INTEGER :: Nx, Ny, Nx_local ! Number of grid points on x and y direction
   INTEGER :: N_iter ! Number of iterations
 
   REAL(MK) :: D, T_max ! Diffusion constant, maximum simulation time.

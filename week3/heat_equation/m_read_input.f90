@@ -3,11 +3,12 @@ MODULE m_read_input
 
 CONTAINS
 
-  SUBROUTINE read_input(filename, Nx, Ny, D, T_max)
+  SUBROUTINE read_input(filename, Nx, Ny, D, T_max, rank, n_proc)
     IMPLICIT NONE
     CHARACTER(len=*), INTENT(in) :: filename
     INTEGER, INTENT(out) :: Nx, Ny
     REAL(MK), INTENT(out) :: D, T_max
+    INTEGER, INTENT(in) :: rank, n_proc
     CHARACTER(len=256) :: buffer, key, val
     INTEGER :: sep_loc, ios
 
@@ -38,16 +39,12 @@ CONTAINS
 
        IF (TRIM(key) == 'Nx') THEN
           READ(val, *) Nx
-          PRINT*, TRIM(key), '=', Nx
        ELSEIF (TRIM(key) == 'Ny') THEN
           READ(val, *) Ny
-          PRINT*, TRIM(key), '=', Ny
        ELSEIF (TRIM(key) == 'D') THEN
           READ(val, *) D
-          PRINT*, TRIM(key), '=', D
        ELSEIF (TRIM(key) == 'T_max') THEN
           READ(val, *) T_max
-          PRINT*, TRIM(key), '=', T_max
        ENDIF
 
 
@@ -56,5 +53,13 @@ CONTAINS
 200 CONTINUE
     !PRINT*, 'EOF'
     CLOSE(10)
+
+    IF (rank == 0) THEN
+       PRINT*, 'Nx =', Nx
+       PRINT*, 'Ny =', Ny
+       PRINT*, 'D =', D
+       PRINT*, 'T_max =', T_max
+    ENDIF
+    
   END SUBROUTINE read_input
 END MODULE m_read_input

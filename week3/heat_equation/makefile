@@ -7,7 +7,7 @@
 #----------------------------------------------------------------------
 # macro defining the target ie executable
 target = runme
-FC = gfortran
+FC = mpifort
 FFLAGS = -ffree-form -O3
 #----------------------------------------------------------------------
 #  Default target
@@ -23,6 +23,7 @@ all: $(target)
 #  before m_init and before diffuse2
 #----------------------------------------------------------------------
 objs = m_global.o\
+			 m_exchange_boundary.o\
 			 m_save_output.o\
 			 m_update_memory.o\
 			 m_step.o\
@@ -49,21 +50,29 @@ $(target):$(objs) makefile
 
 clean:
 	rm -fr $(objs)
-	rm -fr diff*.dat
-	rm -fr *.dat
 	rm -fr *.o
 	rm -fr *.mod
 
+cleandata:
+	rm -fr diff*.dat
+	rm -fr *.dat
+
+
 run:
-	./$(target)
+	mpirun -np 16 $(target)
+run1:
+	mpirun -np 1 $(target)
+run2:
+	mpirun -np 2 $(target)
+run4:
+	mpirun -np 4 $(target)
+run5:
+	mpirun -np 5 $(target)
 
 
 animate:
 	python animate.py
 
 
-# Example of running other targets from a target using the inbuilt $(MAKE) macro
-runall:
-	$(MAKE) run
-	$(MAKE) animate
-	$(MAKE) clean
+plot:
+	python plot.py

@@ -1,10 +1,12 @@
-Nx = 4097
-Ny = 4097
+! large domain parameters
+!D = 1
+!Nx = 4097
+!Ny = 4097
+!T_max = 1.475214958190918e-06
+
+
+! plotting parameters
 D = 1
-
-this line doesn't do anything
-T_max = 1.475214958190918e-06
-
-!Nx = 21
-!Ny = 21
-!T_max = 0.125
+Nx = 100
+Ny = 100
+T_max = 0.05
