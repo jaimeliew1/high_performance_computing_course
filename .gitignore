@@ -4,6 +4,7 @@
 
 runme
 calcpi
+*.png
 week2/matrix_times_vector/matrix_times_vector
 week2/pi/calcpi
 *.gif
